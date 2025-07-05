@@ -14,7 +14,7 @@ MarkDownload now includes an **LLM Optimization** feature designed to enhance ma
 ### Features:
 - **Structured YAML Frontmatter**: Automatically adds metadata including title, URL, date, author, excerpt, and tags
 - **Clean Links**: Removes tracking parameters (utm_*, fbclid, gclid) for cleaner URLs
-- **Enhanced Content Structure**: Optimizes formatting and whitespace for better AI parsing
+- **Enhanced Content Structure**: Optimizes formatting and whitespace for better AI parsing, including special handling for arXiv's verbose MathML annotations.
 - **Conditional Application**: Enable/disable via the settings page
 
 ### How to Enable:

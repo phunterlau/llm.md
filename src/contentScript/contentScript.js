@@ -4,6 +4,15 @@ function notifyExtension() {
 }
 
 function getHTMLOfDocument() {
+    // Remove unnecessary MathML annotations and semantics tags
+    document.querySelectorAll('annotation-xml, semantics').forEach(el => el.remove());
+
+    // Remove verbose attributes from math elements
+    document.querySelectorAll('math [id], math [xref]').forEach(el => {
+        el.removeAttribute('id');
+        el.removeAttribute('xref');
+    });
+
     // make sure a title tag exists so that pageTitle is not empty and
     // a filename can be genarated.
     if (document.head.getElementsByTagName('title').length == 0) {

@@ -228,12 +228,22 @@ function turndownWithOptimizations(content, options, article) {
   });
 
   // Handle multiple lines math
-  if (article.math) {
-    turndownService.addRule('mathjax', {
-      filter(node, options) {
-        return article.math.hasOwnProperty(node.id);
-      },
-      replacement(content, node, options) {
+  turndownService.addRule('math', {
+    filter: 'math',
+    replacement: function (content, node, options) {
+      // First, try to get the annotation content
+      const annotation = node.querySelector('annotation[encoding="application/x-tex"]');
+      if (annotation) {
+        let tex = annotation.textContent.trim().replaceAll('\xa0', '');
+        if (node.getAttribute('display') === 'inline') {
+          tex = tex.replaceAll('\n', ' ');
+          return `$${tex}$`;
+        }
+        else return `$$\n${tex}\n$$`;
+      }
+
+      // Fallback for other math content
+      if (article.math && article.math.hasOwnProperty(node.id)) {
         const math = article.math[node.id];
         let tex = math.tex.trim().replaceAll('\xa0', '');
         if (math.inline) {
@@ -242,8 +252,17 @@ function turndownWithOptimizations(content, options, article) {
         }
         else return `$$\n${tex}\n$$`;
       }
-    });
-  }
+
+      // Final fallback: return the content as is, wrapped in math delimiters
+      const isInline = node.getAttribute('display') !== 'block';
+      if (isInline) {
+        return `$${content}$`;
+      }
+      else {
+        return `$$\n${content}\n$$`;
+      }
+    }
+  });
 
   function repeat(character, count) {
     return Array(count + 1).join(character);
@@ -293,6 +312,30 @@ function turndownWithOptimizations(content, options, article) {
     },
     replacement: (content, node, tdopts) => {
       return convertToFencedCodeBlock(node, tdopts);
+    }
+  });
+
+  // Handle multiple tbodies in a table
+  turndownService.addRule('multiple-tbodies', {
+    filter: 'table',
+    replacement: function (content, node) {
+      let markdown = '';
+      const tbodies = node.querySelectorAll('tbody');
+      if (tbodies.length > 1) {
+        tbodies.forEach(tbody => {
+          markdown += turndownService.turndown(tbody);
+        });
+        return markdown;
+      }
+      return content;
+    }
+  });
+
+  // Handle td elements in a more graceful way
+  turndownService.addRule('td', {
+    filter: 'td',
+    replacement: function (content, node) {
+      return content.trim() + ' ';
     }
   });
 
