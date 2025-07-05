@@ -26,6 +26,7 @@ const defaultOptions = {
   obsidianIntegration: false,
   obsidianVault: "",
   obsidianFolder: "",
+  llmOptimized: false,
 }
 
 // function to get the options from storage and substitute default options if it fails
