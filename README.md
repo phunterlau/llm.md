@@ -7,6 +7,41 @@ This is an extension to clip websites and download them into a readable markdown
 To use this add-on, simply click the add-on icon while you are browsing the page you want to save offline. A popup will show the rendered markdown so you can make minor edits or copy the text, or you can click the download button to download an .md file.  
 Selecting text will allow you to download just the selected text
 
+## ✨ LLM Optimization Feature
+
+MarkDownload now includes an **LLM Optimization** feature designed to enhance markdown output for AI and Large Language Model processing:
+
+### Features:
+- **Structured YAML Frontmatter**: Automatically adds metadata including title, URL, date, author, excerpt, and tags
+- **Clean Links**: Removes tracking parameters (utm_*, fbclid, gclid) for cleaner URLs
+- **Enhanced Content Structure**: Optimizes formatting and whitespace for better AI parsing
+- **Conditional Application**: Enable/disable via the settings page
+
+### How to Enable:
+1. Click the extension icon and then the gear icon to open settings
+2. Check "Optimize Markdown for LLM" option
+3. Save settings
+
+When enabled, your markdown files will include structured metadata and cleaned content optimized for AI processing workflows.
+
+## 🔧 Manifest V3 Migration
+
+This extension has been updated to use **Manifest V3**, the latest extension standard for Chrome and Edge browsers:
+
+### Technical Improvements:
+- **Modern Service Worker Architecture**: Replaced background scripts with service workers for better performance and security
+- **Offscreen Document Support**: DOM operations now use offscreen documents for compatibility with service worker limitations
+- **Updated APIs**: All deprecated APIs have been updated to their modern equivalents
+- **Enhanced Security**: Improved permissions model and content security policies
+- **Future-Proof**: Ensures compatibility with current and future browser versions
+
+### For Developers:
+- Background scripts migrated to `background-v3.js` service worker
+- DOM operations moved to offscreen document (`src/offscreen/`)
+- Updated from `tabs.executeScript` to `scripting.executeScript`
+- Added proper error handling and timeout protection
+- Maintained backward compatibility with all existing features
+
 See the [Markdownload User Guide](https://github.com/deathau/markdownload/blob/master/user-guide.md#markdownload-user-guide) for more details on the functionality of this extension
 
 # Installation
