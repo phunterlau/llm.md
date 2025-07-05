@@ -1,6 +1,6 @@
 function notifyExtension() {
     // send a message that the content should be clipped
-    browser.runtime.sendMessage({ type: "clip", dom: content});
+    browser.runtime.sendMessage({ type: "clip", dom: content, tabUrl: window.location.href});
 }
 
 function getHTMLOfDocument() {

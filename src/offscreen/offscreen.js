@@ -339,13 +339,41 @@ function turndownWithOptimizations(content, options, article) {
     }
   });
 
-  let markdown = (options.frontmatter || '') + turndownService.turndown(content) + (options.backmatter || '');
+  let markdown = turndownService.turndown(content);
+
+  if (options.includeToc) {
+    const toc = generateToc(markdown);
+    markdown = toc + markdown;
+  }
+
+  markdown = (options.frontmatter || '') + markdown + (options.backmatter || '');
   markdown = markdown.replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f-\u009f\u00ad\u061c\u200b-\u200f\u2028\u2029\ufeff\ufff9-\ufffc]/g, '');
   
   // Collapse multiple consecutive blank lines into a single blank line
   markdown = markdown.replace(/\n{3,}/g, '\n\n');
 
   return { markdown: markdown, imageList: imageList };
+}
+
+function generateToc(markdown) {
+  const toc = [];
+  const lines = markdown.split('\n');
+  const headingRegex = /^(#+)\s+(.*)/;
+
+  lines.forEach(line => {
+    const match = line.match(headingRegex);
+    if (match) {
+      const level = match[1].length;
+      const title = match[2];
+      const slug = title.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+      toc.push(`${'  '.repeat(level - 1)}- [${title}](#${slug})`);
+    }
+  });
+
+  if (toc.length > 0) {
+    return `## Table of Contents\n\n${toc.join('\n')}\n\n---\n\n`;
+  }
+  return '';
 }
 
 // Add replaceAll polyfill if not available

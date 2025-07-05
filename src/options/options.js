@@ -21,6 +21,7 @@ const saveOptions = e => {
         obsidianVault: document.querySelector("[name='obsidianVault']").value,
         obsidianFolder: document.querySelector("[name='obsidianFolder']").value,
         llmOptimized: document.querySelector("[name='llmOptimized']").checked,
+        includeToc: document.querySelector("[name='includeToc']").checked,
 
         headingStyle: getCheckedValue(document.querySelectorAll("input[name='headingStyle']")),
         hr: getCheckedValue(document.querySelectorAll("input[name='hr']")),
@@ -126,6 +127,7 @@ const setCurrentChoice = result => {
     document.querySelector("[name='obsidianVault']").value = options.obsidianVault;
     document.querySelector("[name='obsidianFolder']").value = options.obsidianFolder;
     document.querySelector("[name='llmOptimized']").checked = options.llmOptimized;
+    document.querySelector("[name='includeToc']").checked = options.includeToc;
 
     setCheckedValue(document.querySelectorAll("[name='headingStyle']"), options.headingStyle);
     setCheckedValue(document.querySelectorAll("[name='hr']"), options.hr);
