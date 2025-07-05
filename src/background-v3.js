@@ -159,9 +159,12 @@ async function convertArticleToMarkdown(article, downloadImages = null) {
   // Apply LLM optimizations if enabled
   if (options.llmOptimized) {
     // Add structured frontmatter for LLM processing
+    // Use multi-layered URL retrieval for maximum reliability
+    const articleUrl = article.tabUrl || article.url || article.baseURI || '';
+    
     const llmFrontmatter = `---
 title: "${article.title || 'Untitled'}"
-url: "${article.baseURI || ''}"
+url: "${articleUrl}"
 date: "${new Date().toISOString()}"
 author: "${article.byline || 'Unknown'}"
 excerpt: "${(article.excerpt || '').replace(/"/g, '\\"')}"
@@ -409,6 +412,12 @@ async function notify(message) {
   const options = await getOptions();
   if (message.type == "clip") {
     const article = await getArticleFromDom(message.dom);
+    
+    // Add the tab URL to the article object for more reliable URL retrieval
+    if (message.tabUrl) {
+      article.tabUrl = message.tabUrl;
+    }
+    
     if (message.selection && message.clipSelection) {
       article.content = message.selection;
     }
